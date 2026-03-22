@@ -1,0 +1,13 @@
+{
+  "name": "arnold-core",
+  "version": "1.0.0",
+  "description": "Arnold Telegram AI Agent",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "node-telegram-bot-api": "^0.61.0",
+    "openai": "^4.0.0"
+  }
+}
