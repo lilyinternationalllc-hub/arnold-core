@@ -35,7 +35,7 @@ bot.on('message', async (msg) => {
     },
   ],
 });
-
+console.log("FULL RESPONSE:", JSON.stringify(response, null, 2));
 const reply =
   response?.choices?.[0]?.message?.content || "No response generated.";
     await bot.sendMessage(msg.chat.id, reply);
