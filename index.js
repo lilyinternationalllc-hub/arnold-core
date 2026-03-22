@@ -3,8 +3,10 @@ import OpenAI from 'openai';
 import http from 'http';
 
 const token = process.env.TELEGRAM_BOT_TOKEN;
-const appUrl = process.env.APP_URL; // your Railway public URL
+const appUrl = process.env.APP_URL; // e.g. https://your-app.up.railway.app
 const port = process.env.PORT || 3000;
+const webhookPath = /telegram-webhook;
+const webhookUrl = appUrl ? ${appUrl}${webhookPath} : null;
 
 const bot = new TelegramBot(token);
 const openai = new OpenAI({
@@ -43,7 +45,7 @@ bot.on('message', async (msg) => {
 });
 
 const server = http.createServer((req, res) => {
-  if (req.method === 'POST') {
+  if (req.method === 'POST' && req.url === webhookPath) {
     let body = '';
     req.on('data', (chunk) => {
       body += chunk;
@@ -69,8 +71,9 @@ const server = http.createServer((req, res) => {
 
 server.listen(port, async () => {
   console.log(`Server listening on ${port}`);
-  if (appUrl) {
-    await bot.setWebHook(appUrl);
-    console.log(`Webhook set to ${appUrl}`);
+  if (webhookUrl) {
+    await bot.deleteWebHook();
+    await bot.setWebHook(webhookUrl);
+    console.log(`Webhook set to ${webhookUrl}`);
   }
 });
