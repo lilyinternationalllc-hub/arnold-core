@@ -21,29 +21,31 @@ bot.on('message', async (msg) => {
   if (msg.text === '/start') return;
   if (!msg.text) return;
 
-  try {
-    const response = await openai.chat.completions.create({
-      model: process.env.OPENAI_MODEL || "gpt-4o",
-      messages: [
-        {
-          role: "system",
-          content: "You are Arnold, a disciplined, profit-focused luxury watch deal assistant."
-        },
-        {
-          role: "user",
-          content: msg.text,
-        },
-      ],
-    });
+try {
+  const response = await openai.chat.completions.create({
+    model: process.env.OPENAI_MODEL || 'gpt-4o',
+    messages: [
+      {
+        role: 'system',
+        content: 'You are Arnold, a disciplined, profit-focused luxury watch deal assistant.',
+      },
+      {
+        role: 'user',
+        content: msg.text,
+      },
+    ],
+  });
 
-    const reply =
-      response?.choices?.[0]?.message?.content || "No response generated.";
+  console.log('FULL RESPONSE:', JSON.stringify(response, null, 2));
 
-    await bot.sendMessage(msg.chat.id, reply);
-  } catch (err) {
-    console.error(err);
-    await bot.sendMessage(msg.chat.id, 'Error processing request.');
-  }
+  const reply =
+    response?.choices?.[0]?.message?.content || 'No response generated.';
+
+  await bot.sendMessage(msg.chat.id, reply);
+} catch (err) {
+  console.error('OPENAI ERROR:', err);
+  await bot.sendMessage(msg.chat.id, 'Error processing request.');
+}
 });
 
 const server = http.createServer((req, res) => {
