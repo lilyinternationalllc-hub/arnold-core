@@ -2,6 +2,7 @@
   "name": "arnold-core",
   "version": "1.0.0",
   "description": "Arnold Telegram AI Agent",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
