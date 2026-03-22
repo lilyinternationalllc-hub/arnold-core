@@ -6,7 +6,7 @@ const token = process.env.TELEGRAM_BOT_TOKEN;
 const appUrl = process.env.APP_URL; // e.g. https://your-app.up.railway.app
 const port = process.env.PORT || 3000;
 const webhookPath = '/telegram-webhook';
-const webhookUrl = appUrl ? `${appUrl}${webhookPath}` : null;
+const webhookUrl = appUrl ? ${appUrl}${webhookPath} : null;
 
 const bot = new TelegramBot(token);
 const openai = new OpenAI({
@@ -22,22 +22,25 @@ bot.on('message', async (msg) => {
   if (!msg.text) return;
 
   try {
-  onst response = await openai.chat.completions.create({
-  model: process.env.OPENAI_MODEL || "gpt-4o",
-  messages: [
-    {
-      role: "system",
-      content: "You are Arnold, a disciplined, profit-focused luxury watch deal assistant."
-    },
-    {
-      role: "user",
-      content: msg.text,
-    },
-  ],
-});
-console.log("FULL RESPONSE:", JSON.stringify(response, null, 2));
-const reply =
-  response?.choices?.[0]?.message?.content || "No response generated.";
+    const response = await openai.chat.completions.create({
+      model: process.env.OPENAI_MODEL || 'gpt-4o',
+      messages: [
+        {
+          role: 'system',
+          content: 'You are Arnold, a disciplined, profit-focused luxury watch deal assistant.',
+        },
+        {
+          role: 'user',
+          content: msg.text,
+        },
+      ],
+    });
+
+    console.log('FULL RESPONSE:', JSON.stringify(response, null, 2));
+
+    const reply =
+      response?.choices?.[0]?.message?.content || 'No response generated.';
+
     await bot.sendMessage(msg.chat.id, reply);
   } catch (err) {
     console.error(err);
@@ -48,9 +51,11 @@ const reply =
 const server = http.createServer((req, res) => {
   if (req.method === 'POST' && req.url === webhookPath) {
     let body = '';
+
     req.on('data', (chunk) => {
       body += chunk;
     });
+
     req.on('end', async () => {
       try {
         const update = JSON.parse(body);
@@ -63,6 +68,7 @@ const server = http.createServer((req, res) => {
         res.end('error');
       }
     });
+
     return;
   }
 
@@ -72,6 +78,7 @@ const server = http.createServer((req, res) => {
 
 server.listen(port, async () => {
   console.log(`Server listening on ${port}`);
+
   if (webhookUrl) {
     await bot.deleteWebHook();
     await bot.setWebHook(webhookUrl);
