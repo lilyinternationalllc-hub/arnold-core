@@ -6,7 +6,7 @@ const token = process.env.TELEGRAM_BOT_TOKEN;
 const appUrl = process.env.APP_URL;
 const port = process.env.PORT || 3000;
 const webhookPath = '/telegram-webhook';
-const webhookUrl = appUrl ? ${appUrl}${webhookPath} : null;
+const webhookUrl = appUrl ? `${appUrl}${webhookPath}` : null;
 
 const bot = new TelegramBot(token);
 const openai = new OpenAI({
