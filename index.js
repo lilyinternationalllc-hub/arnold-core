@@ -3,10 +3,11 @@ import OpenAI from 'openai';
 import http from 'http';
 
 const token = process.env.TELEGRAM_BOT_TOKEN;
-const appUrl = process.env.APP_URL; // e.g. https://your-app.up.railway.app
+const appUrl = process.env.APP_URL;
 const port = process.env.PORT || 3000;
+
 const webhookPath = '/telegram-webhook';
-const webhookUrl = appUrl ? `${appUrl}${webhookPath}` : null;
+const webhookUrl = appUrl ? ${appUrl}${webhookPath} : null;
 
 const bot = new TelegramBot(token);
 const openai = new OpenAI({
@@ -23,23 +24,21 @@ bot.on('message', async (msg) => {
 
   try {
     const response = await openai.chat.completions.create({
-      model: process.env.OPENAI_MODEL || 'gpt-4o',
+      model: process.env.OPENAI_MODEL || "gpt-4o",
       messages: [
         {
-          role: 'system',
-          content: 'You are Arnold, a disciplined, profit-focused luxury watch deal assistant.',
+          role: "system",
+          content: "You are Arnold, a disciplined, profit-focused luxury watch deal assistant."
         },
         {
-          role: 'user',
+          role: "user",
           content: msg.text,
         },
       ],
     });
 
-    console.log('FULL RESPONSE:', JSON.stringify(response, null, 2));
-
     const reply =
-      response?.choices?.[0]?.message?.content || 'No response generated.';
+      response?.choices?.[0]?.message?.content || "No response generated.";
 
     await bot.sendMessage(msg.chat.id, reply);
   } catch (err) {
