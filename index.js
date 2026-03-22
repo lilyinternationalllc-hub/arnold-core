@@ -22,21 +22,22 @@ bot.on('message', async (msg) => {
   if (!msg.text) return;
 
   try {
-   const response = await openai.responses.create({
-  model: process.env.OPENAI_MODEL || 'gpt-4o',
-  input: [
+  onst response = await openai.chat.completions.create({
+  model: process.env.OPENAI_MODEL || "gpt-4o",
+  messages: [
     {
-      role: 'system',
-      content: 'You are Arnold, a disciplined, profit-focused luxury watch deal assistant.',
+      role: "system",
+      content: "You are Arnold, a disciplined, profit-focused luxury watch deal assistant."
     },
     {
-      role: 'user',
+      role: "user",
       content: msg.text,
     },
   ],
 });
 
-const reply = response.output_text || 'No response generated.';
+const reply =
+  response?.choices?.[0]?.message?.content || "No response generated.";
     await bot.sendMessage(msg.chat.id, reply);
   } catch (err) {
     console.error(err);
